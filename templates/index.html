@@ -84,14 +84,22 @@
         <li><a href="{{ url_for('homepage')}}">About</a></li>
       </ul>
     </nav>
-    <div class="container mt-5">
+    <div class="container mt-5 background-container">
+
       <div class="card">
-        <div class="card-body">
-          <h1 class="card-title">IP Information</h1>
+        <div class="card-body d-flex row justify-content-center">
+          <div class="d-flex align-items-center justify-content-center mb-4">          
+            <h1 class="card-title d-flex align-items-center">IP Information</h1>
+          </div>
+
           <ul class="list-group list-group-flush">
-            {% for key, value in ip_info.items() %}
+         
+              {% for key, value in ip_info.items() %}
+
             <li class="list-group-item">
-              <strong>{{ key }}:</strong> {{ value }}
+              
+                <strong>{{ key }}:</strong> {{ value }}
+              
             </li>
             {% endfor %}
           </ul>
@@ -99,11 +107,17 @@
       </div>
       <!-- Map -->
       <h4>Measurement Controls</h4>
-      <button class="btn map-btn" id="measure-btn">
+      <button
+        class="btn map-btn border border-solid border-2 rounded bg-info"
+        id="measure-btn"
+      >
         <i class="fas fa-ruler"></i> Measure Distance
       </button>
 
-      <button class="btn map-btn" id="finish-measure-btn">
+      <button
+        class="btn map-btn border border-solid border-2 rounded bg-info"
+        id="finish-measure-btn"
+      >
         <i class="fas fa-check"></i> Finish Measuring
       </button>
       <div
@@ -117,6 +131,7 @@
       >
         Total Distance: <strong id="total-distance">0</strong> meters
       </div>
+    </br>
       <div id="search-container">
         <div class="input-group">
           <input
