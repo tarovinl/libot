@@ -2,7 +2,7 @@
 from flask import Flask, render_template_string
 import requests
 
-app = Flask(_name_)
+app = Flask(__name__)
 
 def get_ip_info():
     try:
@@ -65,5 +65,5 @@ def home():
     """
     return render_template_string(html, ip_info=ip_info)
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     app.run(debug=True)
