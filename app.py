@@ -41,19 +41,7 @@ def handle_exception(e):
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
     logger.exception(f"An error occurred: {str(e)}")
-    return render_template_string("""
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Error</title>
-    </head>
-    <body>
-        <h1>An error occurred</h1>
-        <p>{error_message}</p>
-    </body>
-    </html>
-    """, error_message=str(e)), 500
+    return render_template_string('error.html', error_message=str(e)), 500
 
 @app.route('/')
 def index():
