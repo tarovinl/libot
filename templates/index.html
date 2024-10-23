@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IP Information</title>
+    <title>IP - Map</title>
     <link
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
       rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
     />
     <link
       href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
@@ -14,53 +14,65 @@
     />
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
     <style>
       #mapid {
-        height: 400px;
+        height: 750px;
         width: 100%;
         margin-top: 20px;
       }
 
       nav {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 40px;
-      font-size: 18px;
-      background-color: white;
-      box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-      z-index: 10;
-    }
+        position: fixed;
+        top: 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 40px;
+        font-size: 18px;
+        background-color: white;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        z-index: 10;
+      }
 
-    nav h1 {
-      color: rgb(0, 0, 0);
-      font-size: 24px;
-    }
+      nav h1 {
+        color: rgb(0, 0, 0);
+        font-size: 24px;
+      }
 
-    nav ul {
-      list-style: none;
-      display: flex;
-      margin: 0;
-      padding: 0;
-    }
+      nav ul {
+        list-style: none;
+        display: flex;
+        margin: 0;
+        padding: 0;
+      }
 
-    nav ul li {
-      margin-left: 20px;
-    }
+      nav ul li {
+        margin-left: 20px;
+      }
 
-    nav ul li a {
-      color: rgba(0, 0, 53);
-      text-decoration: none;
-      font-weight: 600;
-    }
+      nav ul li a {
+        color: rgba(0, 0, 53);
+        text-decoration: none;
+        font-weight: 600;
+      }
 
-    nav ul li a:hover {
-      text-decoration: underline;
-    }
+      nav ul li a:hover {
+        text-decoration: underline;
+      }
     </style>
   </head>
   <body>
@@ -68,7 +80,7 @@
       <h1>LIBOT</h1>
       <ul>
         <li><a href="{{ url_for('homepage') }}">Home</a></li>
-        <li><a href="{{ url_for('index') }}">Check your IP</a></li>
+        <li><a href="{{ url_for('index') }}">Locate</a></li>
         <li><a href="{{ url_for('homepage')}}">About</a></li>
       </ul>
     </nav>
@@ -86,31 +98,67 @@
         </div>
       </div>
       <!-- Map -->
+      <h4>Measurement Controls</h4>
+      <button class="btn map-btn" id="measure-btn">
+        <i class="fas fa-ruler"></i> Measure Distance
+      </button>
+
+      <button class="btn map-btn" id="finish-measure-btn">
+        <i class="fas fa-check"></i> Finish Measuring
+      </button>
+      <div
+        id="distance-display"
+        style="
+          margin-top: 10px;
+          padding: 10px;
+          background: #f8f9fa;
+          border: 1px solid #ccc;
+        "
+      >
+        Total Distance: <strong id="total-distance">0</strong> meters
+      </div>
+      <div id="search-container">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            id="search-bar"
+            placeholder="Search location..."
+          />
+          <div class="input-group-append">
+            <button class="btn" id="search-btn" type="button">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+
+        <div id="error-message" style="color: red; margin-top: 5px"></div>
+      </div>
       <div id="mapid"></div>
     </div>
-    
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script>
 
-      var locationString = "{{ ip_info['Location'] }}"; 
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <!-- Geocoder -->
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script>
+      var locationString = "{{ ip_info['Location'] }}";
       if (locationString) {
-        var coords = locationString.split(',');
+        var coords = locationString.split(",");
         if (coords.length === 2) {
           var latitude = parseFloat(coords[0]);
           var longitude = parseFloat(coords[1]);
 
           if (!isNaN(latitude) && !isNaN(longitude)) {
-           
-            var map = L.map('mapid').setView([latitude, longitude], 13);
+            console.log(latitude, longitude);
+            var map = L.map("mapid").setView([latitude, longitude], 13);
 
-          
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
               maxZoom: 18,
             }).addTo(map);
 
-           
-            L.marker([latitude, longitude]).addTo(map)
-              .bindPopup('You are here.')
+            L.marker([latitude, longitude])
+              .addTo(map)
+              .bindPopup("You are here.")
               .openPopup();
           } else {
             console.error("Invalid latitude or longitude.");
@@ -121,6 +169,89 @@
       } else {
         console.error("No location data available.");
       }
+
+      // Measurement functionality
+      var measureLayer;
+      var markers = [];
+      var polyline;
+
+      document
+        .getElementById("measure-btn")
+        .addEventListener("click", function () {
+          if (measureLayer) {
+            map.removeLayer(measureLayer);
+            markers = [];
+            if (polyline) {
+              map.removeLayer(polyline);
+              polyline = null;
+            }
+          }
+
+          measureLayer = L.layerGroup().addTo(map);
+          map.on("click", function (e) {
+            const marker = L.marker(e.latlng).addTo(measureLayer);
+            markers.push(e.latlng);
+
+            if (markers.length > 1) {
+              if (polyline) {
+                map.removeLayer(polyline);
+              }
+              polyline = L.polyline(markers, { color: "blue" }).addTo(map);
+            }
+          });
+        });
+
+      document
+        .getElementById("finish-measure-btn")
+        .addEventListener("click", function () {
+          if (markers.length < 2) {
+            alert("At least two points are required to measure distance.");
+            return;
+          }
+
+          const points = markers.map((marker) => [marker.lat, marker.lng]);
+
+          // Send points to Flask for distance calculation
+          fetch("/calculate_distance", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ points: points }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              document.getElementById("total-distance").textContent =
+                data.total_distance.toFixed(2);
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        });
+
+      // Geocoding for searching locations
+      var geocoder = L.Control.Geocoder.nominatim();
+      document
+        .getElementById("search-btn")
+        .addEventListener("click", function () {
+          var query = document.getElementById("search-bar").value;
+          var errorMessage = document.getElementById("error-message");
+          errorMessage.textContent = "";
+
+          geocoder.geocode(query, function (results) {
+            if (results.length > 0) {
+              var latlng = results[0].center;
+              map.setView(latlng, 14);
+              L.marker(latlng)
+                .addTo(map)
+                .bindPopup(results[0].html || results[0].name)
+                .openPopup();
+              console.log("Moved to: ", latlng);
+            } else {
+              errorMessage.textContent = "Location not found.";
+            }
+          });
+        });
     </script>
   </body>
 </html>

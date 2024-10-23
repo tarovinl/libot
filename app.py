@@ -1,6 +1,7 @@
 # app.py
 from venv import logger
-from flask import Flask, render_template_string
+from flask import Flask, jsonify, render_template_string, request
+import geopy.distance
 import requests
 import logging
 from flask import render_template
@@ -39,6 +40,16 @@ def get_ip_info():
         return {"error": f"Error fetching IP information: {e}"}
 
     
+@app.route('/calculate_distance', methods=['POST'])
+def calculate_distance():
+    data = request.get_json()  # Get JSON data from request
+    points = data['points']  # Expecting points to be a list of lat/lng tuples
+    total_distance = 0.0
+
+    for i in range(1, len(points)):
+        total_distance += geopy.distance.distance(points[i-1], points[i]).meters
+
+    return jsonify({'total_distance': total_distance})
 
 @app.route('/homepage')
 def homepage():
