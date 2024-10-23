@@ -28,9 +28,17 @@ def get_ip_info():
         }
         
         return ip_info
-    
+
+          
+        if not ip_info["Location"]:
+            ip_info["Location"] = "0,0"  
+
+        return ip_info
+
     except requests.RequestException as e:
         return {"error": f"Error fetching IP information: {e}"}
+
+    
 
 @app.route('/homepage')
 def homepage():
