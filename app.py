@@ -1,6 +1,9 @@
 # app.py
+from venv import logger
 from flask import Flask, render_template_string
 import requests
+import logging
+from flask import render_template
 
 app = Flask(__name__)
 
@@ -29,41 +32,35 @@ def get_ip_info():
     except requests.RequestException as e:
         return {"error": f"Error fetching IP information: {e}"}
 
-@app.route('/')
-def home():
-    ip_info = get_ip_info()
-    if "error" in ip_info:
-        return ip_info["error"]
-    
-    html = """
+@app.route('/homepage')
+def homepage():
+    return render_template('homepage.html', title='Home - LIBOT')
+
+@app.errorhandler(Exception)
+def handle_exception(e):
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
+    logger.exception(f"An error occurred: {str(e)}")
+    return render_template_string("""
     <!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>IP Information</title>
-        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <title>Error</title>
     </head>
     <body>
-        <div class="container mt-5">
-            <div class="card">
-                <div class="card-body">
-                    <h1 class="card-title">IP Information</h1>
-                    <ul class="list-group list-group-flush">
-                    {% for key, value in ip_info.items() %}
-                        <li class="list-group-item"><strong>{{ key }}:</strong> {{ value }}</li>
-                    {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <h1>An error occurred</h1>
+        <p>{error_message}</p>
     </body>
     </html>
-    """
-    return render_template_string(html, ip_info=ip_info)
+    """, error_message=str(e)), 500
 
+@app.route('/')
+def index():
+    ip_info = get_ip_info()
+    if "error" in ip_info:
+        return ip_info["error"]
+    
+    return render_template('index.html', ip_info=ip_info)
 if __name__ == "__main__":
     app.run(debug=True)

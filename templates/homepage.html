@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home - LIBOT</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+    />
+
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        font-family: "Poppins", sans-serif;
+        overflow-x: hidden;
+        background-color: #f4f4f4;
+      }
+
+      /* Background gradient for the hero section */
+      .hero {
+        height: 100vh;
+
+        background: linear-gradient(
+          0deg,
+          rgba(0, 0, 53, 1) 20%,
+          rgba(255, 255, 255, 1) 100%
+        );
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        text-align: center;
+        position: relative;
+        padding: 20px;
+      }
+
+      /* Navigation */
+      nav {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 40px;
+        font-size: 18px;
+        background-color: white;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        z-index: 10;
+      }
+
+      nav h1 {
+        color: rgb(0, 0, 0);
+        font-size: 24px;
+      }
+
+      nav ul {
+        list-style: none;
+        display: flex;
+        margin: 0;
+        padding: 0;
+      }
+
+      nav ul li {
+        margin-left: 20px;
+      }
+
+      nav ul li a {
+        color: rgba(0, 0, 53);
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      nav ul li a:hover {
+        text-decoration: underline;
+      }
+
+      /* Hero section */
+      .hero h1 {
+        font-size: 48px;
+        font-weight: bold;
+        margin-bottom: 15px;
+      }
+
+      .hero p {
+        font-size: 20px;
+        margin-bottom: 30px;
+      }
+
+      /* Call-to-action button */
+      .hero a {
+        padding: 15px 40px;
+        background-color: white;
+        color: rgba(0, 0, 53);
+        font-size: 18px;
+        font-weight: bold;
+        border-radius: 50px;
+        text-decoration: none;
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .hero a:hover {
+        background-color: rgb(1, 1, 141);
+        color: white;
+      }
+
+      /* About Section */
+      .about {
+        padding: 60px 20px;
+        text-align: center;
+        background-color: #f9f9f9;
+        width: 500;
+      }
+
+      .about h3 {
+        font-size: 36px;
+        margin-bottom: 20px;
+        color: #333;
+      }
+
+      .about p {
+        font-size: 18px;
+        max-width: 800px;
+        margin: 0 auto;
+        color: #555;
+      }
+
+      /* Footer */
+      footer {
+        background-color: rgba(0, 0, 53);
+        color: white;
+        padding: 20px 0;
+        text-align: center;
+      }
+
+      footer p {
+        margin: 0;
+        font-size: 14px;
+      }
+
+      footer a {
+        color: white;
+        text-decoration: underline;
+      }
+
+      footer a:hover {
+        text-decoration: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Navigation Bar -->
+    <nav>
+      <h1>LIBOT</h1>
+      <ul>
+        <li><a href="{{ url_for('homepage') }}">Home</a></li>
+        <li><a href="{{ url_for('index') }}">Map</a></li>
+        <li><a href="#about">About</a></li>
+      </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <h1>Locating Intelligence Brings Optimal Tracking</h1>
+      <h2>(LIBOT)</h2>
+      <p>
+        Wondering where you need to go? Wondering where you are? Try using this map </br>
+        to search any locations, measure distances at real-time location.
+      </p>
+      <a href="{{ url_for('index') }}">Start Here</a>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+      <h3>About LIBOT</h3>
+      <p>
+        LIBOT is an application developed by CK3, a mapping intelligence 
+        that uses the languages of Python and JavaScript to implement a 
+        seamless way to explore maps using different types of street view 
+        according to the preference of our users. 
+      </p>
+    </br>
+      <p>The application also includes real-time tracking, a search function 
+        to find any location in the map, and a measuring distance logic to 
+        understand how far the destination is. LIBOT ensures that users should 
+        always know where they are at any place, at any time.
+    </p>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+      <p>
+        &copy; 2024 (LIBOT) - 4ITE | Cansino, Coraza, Reyes, Tacula
+        | All rights reserved. | <a href="#">Privacy Policy</a> |
+      </p>
+    </footer>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+  </body>
+</html>
