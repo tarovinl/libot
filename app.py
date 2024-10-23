@@ -15,17 +15,12 @@ def get_ip_info():
         data = response.json()
         
         ip_info = {
-            "IP Address": data.get("ip"),
-            "Hostname": data.get("hostname"),
-            "City": data.get("city"),
-            "Region": data.get("region"),
-            "Country": data.get("country"),
-            "Location": data.get("loc"),
-            "Organization": data.get("org"),
-            "Postal": data.get("postal"),
+            "Where you are": data.get("city") + ', ' + data.get("region") + ', ' + data.get("country") ,
+            "Check your coordinates": data.get("loc"),
+            "Check your IP": data.get("ip"),
+            "What did you use?": data.get("org"),
+            "Postal Code": data.get("postal"),
             "Timezone": data.get("timezone"),
-            "ASN": data.get("asn", {}).get("asn"),
-            "ISP": data.get("asn", {}).get("name")
         }
         
         return ip_info
