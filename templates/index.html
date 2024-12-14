@@ -130,6 +130,13 @@
       >
         <i class="fas fa-check"></i> Finish Measuring
       </button>
+      <button
+      class="btn border border-solid border-2 rounded"
+      style="background-color: #8ACE00; "
+      id="refresh-btn"
+    >
+      <i class="fas fa-sync-alt"></i> Refresh Page
+    </button>
       <div
         id="distance-display"
         style="
@@ -139,8 +146,10 @@
           border: 1px solid #ccc;
         "
       >
+   
         Total Distance: <strong id="total-distance">0</strong> meters
       </div>
+      
     </br>
       <div id="search-container">
         <div class="input-group">
@@ -166,6 +175,11 @@
     <!-- Geocoder -->
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script>
+      document
+  .getElementById("refresh-btn")
+  .addEventListener("click", function () {
+    location.reload(); // Reloads the current page
+  });
       var locationString = "{{ ip_info['Check your coordinates'] }}";
       if (locationString) {
         var coords = locationString.split(",");
