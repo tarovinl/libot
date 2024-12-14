@@ -18,7 +18,6 @@ jobs:
       # Step 1: Check out the code
       - name: Checkout code
         uses: actions/checkout@v4
-        run: echo "✅ Code has been checked out"
 
       # Step 2: Set up Python environment
       - name: Set up Python 3.10
