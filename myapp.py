@@ -5,11 +5,15 @@ import geopy.distance
 import requests
 import logging
 from flask import render_template
+import math
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
+logger = logging.getLogger(__name__)
+
 
 def get_ip_info():
     try:
+        print("Test")
         response = requests.get('https://ipinfo.io/json')
         response.raise_for_status()
         data = response.json()
@@ -41,8 +45,7 @@ def calculate_distance():
     points = data['points']  # Expecting points to be a list of lat/lng tuples
     total_distance = 0.0
 
-    for i in range(1, len(points)):
-        total_distance += geopy.distance.distance(points[i-1], points[i]).meters
+    total_distance = sum([((points[i][0] - points[i-1][0])**2 + (points[i][1] - points[i-1][1])**2)**0.5 for i in range(1, len(points))])
 
     return jsonify({'total_distance': total_distance})
 
