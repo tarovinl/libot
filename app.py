@@ -5,8 +5,11 @@ import geopy.distance
 import requests
 import logging
 from flask import render_template
+import math
 
 app = Flask(__name__)
+
+
 
 def get_ip_info():
     try:
