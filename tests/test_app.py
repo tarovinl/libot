@@ -12,7 +12,6 @@ from myapp import app
 # Create a fixture to set up the Flask app for testing
 @pytest.fixture
 def client():
-
     with app.test_client() as client:
         yield client
 
