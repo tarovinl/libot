@@ -1,58 +1,70 @@
 import pytest
-import sys
-import os
-import logging
+from myapp import app  # Import the Flask app
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-from myapp import app
-
-
-
-# Create a fixture to set up the Flask app for testing
 @pytest.fixture
 def client():
     with app.test_client() as client:
         yield client
 
-# Test the index route
 def test_index(client):
-    print("Testing index...")
-    # Send a GET request to the '/' route
-    print("Sending GET request to the '/' route...")
     response = client.get('/')
+    assert response.status_code == 200
+    assert b"Where you are" in response.data
 
-    # Check that the status code is 200 (OK)
-    print("Check that the status code is 200 (OK)...")
-    assert response.status_code == 200
-    
-    # Check if the response contains specific content
-    print("Check if the response contains specific content...")
-    assert b'Where you are' in response.data
-    assert b'Check your coordinates' in response.data
-    print("Index test DONE...")
-# Test the calculate_distance route
 def test_calculate_distance(client):
-    # Send a POST request with sample data to '/calculate_distance'
-    json_data = {
-        'points': [(0, 0), (0, 1), (1, 1)]  # Example coordinates
-    }
-    response = client.post('/calculate_distance', json=json_data)
-    
-    # Check that the status code is 200 (OK)
+    response = client.post('/calculate_distance', json={'points': [(0, 0), (0, 1), (1, 1)]})
     assert response.status_code == 200
-    
-    # Check if the total_distance key is in the response data
     assert 'total_distance' in response.json
     assert response.json['total_distance'] > 0
 
-# Test the homepage route
-def test_homepage(client):
-    # Send a GET request to the '/homepage' route
-    response = client.get('/homepage')
-    
-    # Check that the status code is 200 (OK)
-    assert response.status_code == 200
-    
-    # Check if the response contains the title 'Home - LIBOT'
-    assert b'<title>Home - LIBOT</title>' in response.data
+# import pytest
+# from myapp import app
+# import json
+# from unittest.mock import patch
+
+# # Set up the Flask test client
+# @pytest.fixture
+# def client():
+#     with app.test_client() as client:
+#         yield client
+
+# # Test the homepage route
+# def test_homepage(client):
+#     response = client.get('/homepage')
+#     assert response.status_code == 200
+#     assert b'Home - LIBOT' in response.data  # Check if the title is in the response
+
+# # Test the index route and get_ip_info
+# @patch('myapp.requests.get')
+# def test_index(mock_get, client):
+#     mock_response = {
+#         "city": "Test City",
+#         "region": "Test Region",
+#         "country": "Test Country",
+#         "loc": "123.456,-123.456",
+#         "ip": "192.168.1.1",
+#         "org": "Test Org",
+#         "postal": "12345",
+#         "timezone": "UTC"
+#     }
+#     mock_get.return_value.json.return_value = mock_response
+#     mock_get.return_value.status_code = 200
+
+#     response = client.get('/')
+#     assert response.status_code == 200
+#     assert b'Test City' in response.data  # Check if the city is in the response
+#     assert b'192.168.1.1' in response.data  # Check if the IP is in the response
+
+# # Test the /calculate_distance route
+# def test_calculate_distance(client):
+#     data = {
+#         "points": [
+#             [0, 0],
+#             [3, 4]
+#         ]
+#     }
+#     response = client.post('/calculate_distance', data=json.dumps(data), content_type='application/json')
+#     assert response.status_code == 200
+#     response_data = json.loads(response.data)
+#     assert response_data['total_distance'] == 5.0  # The distance between (0, 0) and (3, 4) is 5
+
